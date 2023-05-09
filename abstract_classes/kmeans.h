@@ -10,7 +10,7 @@ public:
 
     void fit(std::vector<Point>& data);
     const std::vector<Point>& get_centroids() const;
-    std::vector<Point> read_csv(const std::string& file_path) const;
+    double compute_cluster_heterogeneity(const std::vector<Point>& data) const;
 
 protected:
     virtual void initialize_centroids(const std::vector<Point>& data) = 0;

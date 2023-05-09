@@ -37,37 +37,16 @@ const std::vector<Point>& KMeans::get_centroids() const {
     return centroids_;
 }
 
+// Computes the cluster heterogeneity of the data points given the cluster centers and assigned
+// Clusters of the data
+double KMeans::compute_cluster_heterogeneity(const std::vector<Point>& data) const {
+    double heterogeneity = 0.0;
 
-// Read data points from a CSV file and store them in a vector
-std::vector<Point> KMeans::read_csv(const std::string& file_path) const {
-    std::vector<Point> data;
-    std::ifstream file(file_path);
-
-    // Check if the file is open
-    if (!file.is_open()) {
-        std::cerr << "Error: Could not open the file at " << file_path << std::endl;
-        return data;
+    for (const auto& point : data) {
+        int cluster = point.get_cluster();
+        double distance = point.distance_to(centroids_[cluster]);
+        heterogeneity += distance * distance;
     }
 
-    // Read lines from the file
-    std::string line;
-    while (std::getline(file, line)) {
-        std::vector<double> coordinates;
-        std::stringstream line_stream(line);
-        std::string value;
-
-        
-        // Split the line by commas and store the values as coordinates
-        while (std::getline(line_stream, value, ',')) {
-            coordinates.push_back(std::stod(value));
-        }
-
-
-        // Add the point with the coordinates to the data vector
-        data.emplace_back(coordinates);
-    }
-
-    // Close the file
-    file.close();
-    return data;
+    return heterogeneity;
 }
